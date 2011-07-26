@@ -59,7 +59,7 @@ def add(db, args, config):
         item = Item(db, content=content, priority=priority, tags=tags)
     else:
         item = Item(db, priority=priority, tags=tags)
-        item.fill()
+        item.edit(editor=config['editor'])
     item.save()
     if not quiet:
         print util.decorate('OKGREEN','New item addition was successful.\n')

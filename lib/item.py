@@ -37,49 +37,16 @@ class Item:
         self.content = content
         self.db = db
 
-    def fill(self):
-        '''Launch an editor with a tempfile for filling in the item's content,
-           then retrieve the content.'''
-        # Look for a default editor using os.getenv
-        envs = ['EDITOR','VISUAL']
-        editor = None
-        for env in envs:
-            env = os.getenv(env)
-            if env is not None:
-                editor = env
-                break
-        if editor is None:
-            editor = 'vim'
-        # Launch the editor with a tempfile 
-        path = tempfile.mkstemp()[1]
-        syscall = editor + ' ' + path
-        os.system(syscall)
-        if os.path.exists(path):
-            fp = open(path,'r')
-            self.content = unicode(''.join([line for line in fp]))
-            fp.close()
-            return True
-        else:
-            print util.decorate('FAIL','Fatal: Operation Aborted.')
-            return False
-
-    def edit(self):
+    def edit(self,editor=None):
         '''Launch an editor with a tempfile containing the item's content for editing.'''
-        # Look for a default editor using os.getenv
-        envs = ['EDITOR','VISUAL']
-        editor = None
-        for env in envs:
-            env = os.getenv(env)
-            if env is not None:
-                editor = env
-                break
         if editor is None:
-            editor = 'vim'
+            editor = util.choose_editor()
         # Launch the editor with a tempfile 
         path = tempfile.mkstemp()[1]
-        fp = open(path,'a')
-        fp.write(self.content) # write the current content to the temp file
-        fp.close()
+        if self.content is not None:
+            fp = open(path,'a')
+            fp.write(self.content) # write the current content to the temp file
+            fp.close()
         syscall = editor + ' ' + path
         os.system(syscall)
         if os.path.exists(path):

@@ -20,7 +20,7 @@ def edit(db,args,config):
             return False
     if items is not None:
         item = items[0]
-        item.edit()
+        item.edit(editor=config['editor'])
         item.save()
         print util.decorate('OKGREEN','Item was successfully modified.\n')
         item.display()

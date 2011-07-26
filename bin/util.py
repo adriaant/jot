@@ -127,3 +127,16 @@ def guessCommand(word):
         return matches
     else:
         return None
+
+def choose_editor():
+    '''Decides on an editor if not defined in jot.conf'''
+    # Look for a default editor using os.getenv
+    envs = ['EDITOR','VISUAL']
+    editor = None
+    for env in envs:
+        env = os.getenv(env)
+        if env is not None:
+            editor = env
+            break
+    if editor is None:
+        editor = 'vim'
