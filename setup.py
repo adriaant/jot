@@ -51,7 +51,7 @@ def setup(config):
             c.execute('''create virtual table jot using fts4(hash text, content text, priority text, tags text, ts datetime)''')
         except sqlite3.OperationalError:
             print 'Warning--fts3/fts4 not supported. Falling back to basic table, this may affect search speed and accuracy.'
-            c.execute('''create table jot (hash text, content text, priority text, ts datetime)''')
+            c.execute('''create table jot (hash text, content text, priority text, tags text, ts datetime)''')
         c.execute('''create table transactions (hash text, ts datetime)''')
         connection.commit()
         c.close()
@@ -67,6 +67,7 @@ def setup(config):
             print 'Copied std. config to',cpath
         except IOError:
             print 'Fatal: Permission Denied'
+            print 'jot was trying to move jot.conf to',cpath
             print '''Try running:
                         sudo python setup.py'''
             return False
@@ -77,6 +78,7 @@ def setup(config):
         print 'Moved support modules to',path
     except IOError:
         print 'Fatal: Permission Denied'
+        print 'jot was trying to move lib and bin dirs to',path
         print '''Try running:
                     sudo python setup.py'''
     # Change the ownership of .jot:
